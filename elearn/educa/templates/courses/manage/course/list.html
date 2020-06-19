@@ -1,0 +1,60 @@
+{% extends "real_base.html" %}
+{% block title %}My courses{% endblock %}
+{% block content %}
+<br>
+<br>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="#"><h1>My courses</h1></a>
+	</div>
+	<div>
+		<p class="navbar-text navbar-right">
+			<a class="w3-btn-floating-large w3-black" href="{% url 'course_create' %}">+</a>
+		</p>
+	</div>
+</nav>
+<div class="w3-card-8">
+	<div class="jumbotron">
+		<div class="module">
+			{% for course in object_list %}
+			<div class="course-info">
+				<h1>{{ course.title }}</h1>
+				<p>
+					<table>
+						<tr>
+							<th><button onclick="myFunction()" class="w3-btn w3-round ido">Edit <span class="glyphicon glyphicon-collapse-down"></span>
+							</button>
+							<!-- <p id="demo" onclick="myFunction()">Click me to change my text color.</p>
+
+<script>
+function myFunction() {
+    document.getElementById("demo").style.color = "red";
+}
+</script>-->
+								<div id="Demo" class="w3-dropdown-content w3-card">
+							 		<a href="{% url 'course_edit' course.id %}">Course</a>
+							 		<a href="{% url 'course_module_update' course.id %}">Modules</a>
+							 		{% if course.modules.count > 0 %}
+									<a href="{% url 'module_content_list' course.modules.first.id %}">Contents</a>
+									{% endif %}
+							 	</div>
+							 	<a class="w3-btn w3-round" href="{% url 'course_delete' course.id %}">Delete</a>
+							</th>
+						</tr>
+					</table>
+					<script>
+					 	function myFunction() {
+					 		document.getElementById("Demo").classList.toggle("w3-show");
+					 		document.getElementById("Demo").state = 'active';
+					 	}
+					</script>
+				</p>
+			</div>
+			{% empty %}
+			<p>You haven't created any courses yet.</p>
+			{% endfor %}
+			{% csrf_token %}
+		</div>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "real_base.html" %}
+{% block title %}My courses{% endblock %}
+{% block content %}
+<div class="module">
+	{% for course in object_list %}
+	<div class='w3-container'>
+		<div class="jumbotron">
+			<div class="course-info">
+				<h1>{{ course.title }}</h1>
+				<p>
+					<span>owner: <strong>{{ course.owner }}</strong></span>
+					<span>subject: <strong>{{ course.subject }}</strong></span></p>
+				<p><a href="{% url 'student_course_detail' course.id %}" class='btn btn-default btn-lg'>Access contents</a></p>
+			</div>
+		</div>
+	</div>
+	{% empty %}
+	<div class='w3-container'>
+		<div class="jumbotron">
+			<div class="course-info">
+				<p>
+					You are not enrolled in any courses yet.
+					<a href="{% url 'course_list' %}">Browse courses</a>
+				to enroll in a course.
+				</p>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
+

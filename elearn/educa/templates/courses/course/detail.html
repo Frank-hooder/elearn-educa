@@ -1,0 +1,33 @@
+{% extends "real_base.html" %}
+{% block title %}
+	{{ object.title }}
+{% endblock %}
+{% block content %}
+{% with subject=course.subject %}
+<br>
+<br>
+<h1>
+	{{ object.title }}
+</h1>
+<div class="w3-container">
+	<h2>Overview</h2>
+	<p>
+		<a href="{% url 'course_list_subject' subject.slug %}">{{ subject.title }}</a>.<b>
+		{{ course.modules.count }} modules.</b>
+	Instructor: <b>{{ course.owner.get_full_name }}</b>
+	</p>
+	{{ object.overview|linebreaks }}
+	{% if request.user.is_authenticated %}
+	<form action="{% url 'student_enroll_course' %}" method="post">
+		{{ enroll_form }}
+		{% csrf_token %}
+		<button type="submit" style="background-color: white;color: black;border-color: white;border-radius: 16px;"><span class="glyphicon glyphicon-book"></span> Enroll now</button>
+	</form>
+	{% else %}
+	<a href="{% url 'student_registration' %}" class="button">
+	Register to enroll
+	</a>
+	{% endif %}
+</div>
+{% endwith %}
+{% endblock %}

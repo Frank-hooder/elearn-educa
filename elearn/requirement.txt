@@ -1,0 +1,5 @@
+django => 3.6.0
+djangorestframework
+datetime
+random
+django-embed_video

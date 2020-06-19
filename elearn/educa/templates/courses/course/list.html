@@ -1,0 +1,66 @@
+{% extends "real_base.html" %}
+{% load static %}
+{% block title %}
+	{% if subject %}
+		{{ subject.title }} courses
+	{% else %}
+		All courses
+	{% endif %}
+{% endblock %}
+{% block content %}
+<br>
+<br>
+<h1>
+{% if subject %}
+	{{ subject.title }} courses
+{% else %}
+	All courses
+{% endif %}
+</h1>
+<nav class="w3-sidenav w3-light-grey w3-left" style="width:25%">
+  <div class="w3-container w3-dark-grey">
+    <h1>Subjects</h1>
+  </div>
+  <img src="{% static 'resources/logo.png' %}" alt="Fjords" style="width:100%">
+		<div>
+			<ul class="nav">
+				<li {% if not subject %}class="selected"{% endif %}>
+				<a href="{% url 'course_list' %}">All</a>
+				</li>
+				{% for s in subjects %}
+				<li {% if subject == s %}class="selected"{% endif %}>
+					<a href="{% url 'course_list_subject' s.slug %}">{{ s.title }}
+						<br>
+						<span>{{ s.total_courses }} courses</span>
+					</a>
+				</li>
+				{% endfor %}
+				<br>
+			</ul>
+		</div>
+			<div class="w3-container w3-section">
+		<div class="w3-border w3-round w3-padding w3-blue-grey">
+			<span onclick="this.parentElement.style.display='none'" class="w3-closebtn">×</span>
+			<p>Lorem ipsum box...</p>
+		</div>
+	</div>
+</nav>
+<div style="margin-left:25%">
+	<div class="w3-container">
+		<div>
+			{% for course in courses %}
+			{% with subject=course.subject %}
+			<div class="jumbotron">
+				<h1><a href="{% url 'course_detail' course.slug %}">{{ course.title }}</a></h1>
+				<p>
+					<a href="{% url 'course_list_subject' subject.slug %}">{{ subject }}</a>.
+					<b>{{ course.total_modules }} modules.</b>
+		Instructor: <b>{{ course.owner.get_full_name }}</b>
+				</p>
+			</div>
+			{% endwith %}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

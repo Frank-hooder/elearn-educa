@@ -1,0 +1,87 @@
+{% extends "real_base.html" %}
+{% load course %}
+{% load static %}
+{% block title %}
+Module {{ module.order|add:1 }}: {{ module.title }}
+{% endblock %}
+{% block content %}
+<br>
+<br>
+{% with course=module.course %}
+<nav class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="#"><h1>Course "{{ course.title }}"</h1></a>
+	</div>
+	<div>
+		<p class="navbar-text navbar-right">
+			<a class="w3-btn-floating-large w3-black" href="{% url 'course_module_update' course.id %}">edit</a>
+		</p>
+	</div>
+</nav>
+<!--<h1>Course "{{ course.title }}"</h1>-->
+<nav class="w3-sidenav w3-light-grey w3-left" style="width:25%">
+	<h3>Course "{{ course.title }}"</h3>
+  <div class="w3-container w3-dark-grey">
+    <h4>Modules</h4>
+  </div>
+  <img src="{% static 'resources/logo.png' %}" alt="Fjords" style="width:100%">
+		{% for m in course.modules.all %}
+		<div>
+			<a data-id="{{ m.id }}" {% if m == module %} class="w3-grey w3-padding w3-hover-grey"{% endif %} href="{% url 'module_content_list' m.id %}" style="color: white">
+			<a data-id="{{ m.id }}" {% if m == module %} class="w3-grey w3-padding w3-hover-grey"{% endif %} href="{% url 'module_content_list' m.id %}" style="color: black">
+			<span>Module <span class="order">{{ m.order|add:1 }}</span></span>
+			<br>
+			{{ m.title }}
+			</a>
+			</a>
+	{% empty %}
+		<span>No modules yet.</span>
+	{% endfor %}
+		<p><a href="{% url 'course_module_update' course.id %}">Edit modules</a></p>
+	</div>
+	<div class="w3-container w3-section">
+		<div class="w3-border w3-round w3-padding w3-blue-grey">
+			<span onclick="this.parentElement.style.display='none'" class="w3-closebtn">×</span>
+		</div>
+	</div>
+	<br>
+	<br>
+</nav>
+<div style="margin-left:25%">
+	<div class="w3-container">
+		<div>
+			<div class="module">
+				<h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2>
+				<h3>Module contents:</h3>
+				<div class="w3-container w3-card-4 jumbotron">
+					{% for content in module.contents.all %}
+					<div data-id="{{ content.id }}">
+						{% with item=content.item %}
+						<p>{{ item }} <span class="w3-badge w3-dark-grey">{{ item|model_name }}</span></p>
+						<form action="{% url 'module_content_delete' content.id %}" method="post">
+							<a href="{% url 'module_content_update' module.id item|model_name item.id %}" class="w3-btn w3-round">Edit</a>
+							<button class="w3-btn w3-round" type="submit">Delete</button>
+							{% csrf_token %}
+						</form>
+						{% endwith %}
+					</div>
+					{% empty %}
+					<p>This module has no contents yet.</p>
+					{% endfor %}
+				</div>
+				<hr>
+				<div class="w3-container w3-card-4">
+					<h3>Add new content:</h3>
+					<ul class="nav navbar-nav">
+						<li><a href="{% url 'module_content_create' module.id 'text' %}">Text</a></li>
+						<li><a href="{% url 'module_content_create' module.id 'image' %}">Image</a></li>
+						<li><a href="{% url 'module_content_create' module.id 'video' %}">Video</a></li>
+						<li><a href="{% url 'module_content_create' module.id 'file' %}">File</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endwith %}
+{% endblock %}
